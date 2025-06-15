@@ -17,9 +17,9 @@ while not valid:
 stint_1 = df[df["Stint"] == 1.0]
 
 # get all previoud strategies by driver
-print("Total races in raw data:", len(df.groupby(['Year', 'Driver'])))
+# print("Total races in raw data:", len(df.groupby(['Year', 'Driver'])))
 strategies = df.groupby(['Year', 'Driver']).agg(list).reset_index()
-print("Total rows in strategy list:", len(strategies))
+# print("Total rows in strategy list:", len(strategies))
 
 
 # filter strategies based on starting compound
