@@ -13,8 +13,12 @@ while not valid:
     if starting_compound in compounds:
         valid = True
 
+# ensuring the dataframe is correctly sorted
+df = df.sort_values(by=["Year", "Driver", "Stint"])
+
 # filtering to only get the first stints
 stint_1 = df[df["Stint"] == 1.0]
+
 
 # get all previoud strategies by driver
 # print("Total races in raw data:", len(df.groupby(['Year', 'Driver'])))
@@ -24,6 +28,7 @@ strategies = df.groupby(['Year', 'Driver']).agg(list).reset_index()
 
 # filter strategies based on starting compound
 filtered_strats = strategies[strategies["Compound"].str[0] == starting_compound]
+
 
 # find most common second and third stints
 compound_strats = []
