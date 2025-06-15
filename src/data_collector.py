@@ -24,27 +24,33 @@ laps_22 = session_22.laps
 laps_23 = session_23.laps
 laps_24 = session_24.laps
 
+# adding year column manually to each dataframe
+laps_21['Year'] = 2021
+laps_22['Year'] = 2022
+laps_23['Year'] = 2023
+laps_24['Year'] = 2024
+
 # getting the stint data (stint num, tyre compound, stint length) for each driver throughout each race
-stints_21 = laps_21[["Driver", "Stint", "Compound", "LapNumber"]]
-stints_21 = stints_21.groupby(["Driver", "Stint", "Compound"]).agg(
+stints_21 = laps_21[["Year", "Driver", "Stint", "Compound", "LapNumber"]]
+stints_21 = stints_21.groupby(["Year", "Driver", "Stint", "Compound"]).agg(
     PitLap = ("LapNumber", 'max'),
     StintLength = ("LapNumber", 'size')
 ).reset_index()
 
-stints_22 = laps_22[["Driver", "Stint", "Compound", "LapNumber"]]
-stints_22 = stints_22.groupby(["Driver", "Stint", "Compound"]).agg(
+stints_22 = laps_22[["Year", "Driver", "Stint", "Compound", "LapNumber"]]
+stints_22 = stints_22.groupby(["Year", "Driver", "Stint", "Compound"]).agg(
     PitLap = ("LapNumber", 'max'),
     StintLength = ("LapNumber", 'size')
 ).reset_index()
 
-stints_23 = laps_23[["Driver", "Stint", "Compound", "LapNumber"]]
-stints_23 = stints_23.groupby(["Driver", "Stint", "Compound"]).agg(
+stints_23 = laps_23[["Year", "Driver", "Stint", "Compound", "LapNumber"]]
+stints_23 = stints_23.groupby(["Year", "Driver", "Stint", "Compound"]).agg(
     PitLap = ("LapNumber", 'max'),
     StintLength = ("LapNumber", 'size')
 ).reset_index()
 
-stints_24 = laps_24[["Driver", "Stint", "Compound", "LapNumber"]]
-stints_24 = stints_24.groupby(["Driver", "Stint", "Compound"]).agg(
+stints_24 = laps_24[["Year", "Driver", "Stint", "Compound", "LapNumber"]]
+stints_24 = stints_24.groupby(["Year", "Driver", "Stint", "Compound"]).agg(
     PitLap = ("LapNumber", 'max'),
     StintLength = ("LapNumber", 'size')
 ).reset_index()
