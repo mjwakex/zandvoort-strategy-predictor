@@ -1,5 +1,6 @@
 '''
-A pit stop predictor for the dutch gp
+a data collector of rthe dutch gp using fastf1
+author: mjwakex - Marcus Elizondo-Darwin
 '''
 
 import fastf1

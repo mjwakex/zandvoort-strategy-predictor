@@ -1,20 +1,35 @@
+'''
+general strategy prediction based on starting compound using real Zandvoort data
+author: mjwakex -  Marcus Elizondo-Darwin
+'''
+
 import pandas as pd
 from collections import Counter
+import argparse
 
 # number of laps for dutch gp 
 LAPS = 71
+
+# time loss in pitlane avg (seconds)
+TIME_LOSS = 22
+
+# time loss in pitlane under saftey car or VSC (seonds)
+TIME_LOSS_SC = 17
 
 # read the dataset
 df = pd.read_csv("../data/dataset.csv")
 
 
-# get the starting compound
-valid = False
+parser = argparse.ArgumentParser(description="Predict F1 strategy for Zandvoort.")
+parser.add_argument('--compound', type=str, required=True, help='Starting tyre compound (SOFT, MEDIUM, HARD, INTERMEDIATE, WET)')
+
+args = parser.parse_args()
+starting_compound = args.compound.upper()
+
 compounds = ["SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET"]
-while not valid:
-    starting_compound = input("Starting Compound: ").upper()
-    if starting_compound in compounds:
-        valid = True
+if starting_compound not in compounds:
+    print(f"Error: Invalid compound '{starting_compound}'. Valid options: {', '.join(compounds)}")
+    exit(1)
 
 # ensuring the dataframe is correctly sorted
 df = df.sort_values(by=["Year", "Driver", "Stint"])
@@ -23,13 +38,11 @@ df = df.sort_values(by=["Year", "Driver", "Stint"])
 stint_1 = df[df["Stint"] == 1.0]
 
 
-# get all previoud strategies by driver
-# driver_strategies = df.groupby(['Year', 'Driver']).agg(list).reset_index()
-
 strategies = []
 
+# get the strats for each driver
 for (year, driver), group in df.groupby(['Year', 'Driver']):
-    # Sort by stint within each group
+    # sort by stint within each group
     group = group.sort_values(by='Stint')
     compound_list = group['Compound'].tolist()
     pitlap_list = group['PitLap'].tolist()
@@ -50,5 +63,7 @@ most_common = strategy_counts.most_common(1)[0][0]
 print("\nFull strategy breakdown:")
 for i, (compound, pitlap, stint_len) in enumerate(most_common):
     # replace pit lap with FIN if last lap 
-    pitlap_display = "FIN" if int(pitlap) == LAPS else int(pitlap)
+    pitlap_display = "END" if int(pitlap) == LAPS else int(pitlap)
     print(f"Stint {i + 1}: {compound}, pit lap = {pitlap_display}, stint length = {int(stint_len)}")
+print(f"time loss in pitlane (avg) = {TIME_LOSS}s\ntotal time loss with this strat = {TIME_LOSS * len(most_common)}s")
+print(f"time loss in pitlane under saftey car(avg) = {TIME_LOSS_SC}s\ntotal time loss with this strat with saftey car= {TIME_LOSS_SC * len(most_common)}s")
